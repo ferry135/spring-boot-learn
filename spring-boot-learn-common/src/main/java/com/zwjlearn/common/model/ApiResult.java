@@ -1,5 +1,6 @@
 package com.zwjlearn.common.model;
 
+import com.zwjlearn.common.constant.ResultStatus;
 import lombok.*;
 
 import java.io.Serializable;
@@ -7,50 +8,32 @@ import java.io.Serializable;
 /**
  * ApiJSON统一返回格式
  * @param <T>
- * @version 1.0
  */
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiResult<T> implements Serializable {
-    private Integer code;
+    private String code;
     private String message;
+    private String tip;
     private T data;
 
-    public ApiResult() {
-    }
-
-    public ApiResult(Integer code, String message, T data) {
-        this.code = code;
-        this.message = message;
+    public ApiResult(ResultStatus resultStatus,T data){
+        this.code = resultStatus.getCode();
+        this.message = resultStatus.getMessage();
+        this.tip = resultStatus.getTip();
         this.data = data;
-    }
-
-    public ApiResult(Integer code, String message) {
-        this.code = code;
-        this.message = message;
     }
 
     public static <T> ApiResult<T> success() {
         return success(null);
     }
     public static<T> ApiResult<T> success(T data) {
-        return success("操作成功",data);
+        return success(ResultStatus.OK,data);
     }
-    public static<T> ApiResult<T> success(String message, T data) {
-        return new ApiResult<>(200,message,data);
-    }
-
-    public static<T> ApiResult<T> failure(String message, T data) {
-        return new ApiResult<>(500,message,data);
-    }
-    public static<T> ApiResult<T> failure(T data) {
-        return new ApiResult<>(500,"操作失败",data);
-    }
-    public static<T> ApiResult<T> failure(String message) {
-        return failure(message,null);
-    }
-    public static <T> ApiResult<T> failure() {
-        return failure(null);
+    public static<T> ApiResult<T> success(ResultStatus resultStatus, T data) {
+        return new ApiResult<>(resultStatus,data);
     }
 }
