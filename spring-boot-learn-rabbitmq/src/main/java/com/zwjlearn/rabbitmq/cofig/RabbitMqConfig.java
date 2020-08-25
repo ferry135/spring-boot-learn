@@ -17,7 +17,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 public class RabbitMqConfig {
-
+    @Bean
     public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
         connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
         // 消息发送的返回
@@ -40,7 +40,7 @@ public class RabbitMqConfig {
     public CustomExchange delayExchange() {
         Map<String, Object> args = Maps.newHashMap();
         args.put("x-delayed-type", "direct");
-        return new CustomExchange(RabbitQueues.DELAY_QUEUE_EXCHANGE,"x-delayed-message",true,false);
+        return new CustomExchange(RabbitQueues.DELAY_QUEUE_EXCHANGE,"x-delayed-message",true,false,args);
     }
 
     @Bean

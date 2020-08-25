@@ -21,11 +21,12 @@ public class SpringBootLearnRabbitMqApplicationTest {
     }
 
     @Test
-    public void sendDelayQueue() {
+    public void sendDelayQueue() throws InterruptedException {
         log.info("send message");
-        rabbitTemplate.convertAndSend(RabbitQueues.DELAY_QUEUE,"Hello delay queue",message -> {
+        rabbitTemplate.convertAndSend(RabbitQueues.DELAY_QUEUE_EXCHANGE,RabbitQueues.DELAY_QUEUE,"Hello delay queue",message -> {
             message.getMessageProperties().setHeader("x-delay",5000);
             return message;
         });
+        Thread.sleep(6000);
     }
 }

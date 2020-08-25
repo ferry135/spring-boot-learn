@@ -11,14 +11,13 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Slf4j
-@RabbitListener(queues = {RabbitQueues.DIRECT_MODE_QUEUE_ONE})
+@RabbitListener(queues = RabbitQueues.DELAY_QUEUE)
 @Component
-public class DirectQueueOneHandler {
-
+public class DelayQueueHandler {
     @RabbitHandler
-    public void manualAck(String msg, Message message, Channel channel) {
+    public void delayManualAck(String msg, Message message, Channel channel) {
         long deliveryTag = message.getMessageProperties().getDeliveryTag();
-        log.info("手动ack，接收消息：{}",msg);
+        log.info("延迟队列消息，手动ack，接收消息：{}",msg);
         try {
             channel.basicAck(deliveryTag,false);
         } catch (IOException e) {
