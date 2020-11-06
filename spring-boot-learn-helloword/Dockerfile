@@ -5,7 +5,9 @@ FROM openjdk:8-jdk-alpine
 MAINTAINER "zwj 1351072964@qq.com"
 
 # 添加一个存储空间
-VOLUME /tmp
+#VOLUME /tmp
+
+RUN apk add --no-cache tini
 
 # 暴露8080端口
 EXPOSE 8080
@@ -17,4 +19,4 @@ ARG JAR_FILE=target/spring-boot-learn-helloword-1.0.0-SNAPSHOT.jar
 ADD ${JAR_FILE} app.jar
 
 # 启动镜像自动运行程序
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/urandom","-jar","/app.jar"]
+ENTRYPOINT ["/sbin/tini","--","java","-Djava.security.egd=file:/dev/urandom","-jar","/app.jar"]
